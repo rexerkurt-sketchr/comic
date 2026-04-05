@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>THE SOFT TOUCH — A Soft PFM Story</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0d1b2a;
+      background-image: radial-gradient(circle at 50% 0%, #1b3a4b 0%, transparent 55%);
+      font-family: 'Comic Neue', cursive;
+      padding: 24px 16px 60px;
+    }
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: radial-gradient(circle, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 20px 20px;
+      pointer-events: none; z-index: 0;
+    }
+
+    .comic-wrapper {
+      max-width: 860px;
+      margin: 0 auto;
+      position: relative; z-index: 1;
+    }
+
+    /* ========= TITLE ========= */
+    .title-block { text-align: center; margin-bottom: 44px; }
+    .title-block h1 {
+      font-family: 'Bangers', cursive;
+      font-size: clamp(3rem, 8vw, 5.5rem);
+      color: #fff; letter-spacing: 5px; line-height: 1;
+      text-shadow: 5px 5px 0 #2ec4b6, 9px 9px 0 #000, -2px -2px 0 #000;
+    }
+    .title-block .sub {
+      font-family: 'Bangers', cursive;
+      font-size: clamp(1.1rem, 3vw, 1.8rem);
+      color: #f4a261; letter-spacing: 4px; margin-top: 8px;
+      text-shadow: 2px 2px 0 #000;
+    }
+    .title-rule {
+      display: flex; align-items: center; gap: 12px;
+      margin-top: 14px; justify-content: center;
+    }
+    .title-rule hr { flex: 1; max-width: 200px; border: 2px solid #2ec4b6; }
+    .title-rule span { font-family: 'Bangers', cursive; color: #ffe066; font-size: 1.1rem; letter-spacing: 2px; text-shadow: 1px 1px 0 #000; }
+
+    /* ========= PANEL ========= */
+    .panel {
+      border: 5px solid #000;
+      border-radius: 6px;
+      box-shadow: 10px 10px 0 #000, 16px 16px 0 rgba(0,0,0,0.25);
+      margin-bottom: 48px;
+      position: relative;
+      background: #fff;
+      overflow: visible;
+    }
+    .pnum {
+      position: absolute; top: -18px; left: -18px;
+      width: 44px; height: 44px;
+      background: #2ec4b6; border: 3px solid #000; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Bangers', cursive; font-size: 1.4rem;
+      color: #fff; text-shadow: 1px 1px 0 #000;
+      z-index: 20; box-shadow: 3px 3px 0 #000;
+    }
+
+    .scene { line-height: 0; border-bottom: 4px solid #000; }
+    .scene img { width: 100%; display: block; }
+
+    /* ========= PANEL BODY ========= */
+    .panel-body { padding: 14px 14px 16px; background: #fff; }
+
+    /* ========= CAPTION ========= */
+    .cap {
+      padding: 8px 14px;
+      font-weight: 700;
+      font-size: clamp(0.78rem, 1.6vw, 0.92rem);
+      line-height: 1.5; color: #1a1a2e;
+      border: 3px solid #000; border-radius: 4px;
+      margin-bottom: 12px;
+      box-shadow: 3px 3px 0 rgba(0,0,0,0.3);
+    }
+    .cap.yellow { background: #ffe066; }
+    .cap.teal   { background: #cbf3f0; }
+    .cap.red    { background: #e63946; color: #fff; }
+    .cap.green  { background: #95d5b2; }
+    .cap.dark   { background: #0d1b2a; color: #cbf3f0; border-color: #2ec4b6; }
+    .cap.gold   { background: #ffd166; }
+
+    /* ========= BUBBLES ROW ========= */
+    .bubbles {
+      display: flex; gap: 12px; flex-wrap: wrap;
+      margin-top: 4px;
+    }
+    .bubbles .bub,
+    .bubbles .think,
+    .bubbles .shout { margin-bottom: 24px; }
+
+    /* ========= SPEECH BUBBLE ========= */
+    .bub {
+      flex: 1; min-width: 160px;
+      background: #fff; border: 3px solid #000; border-radius: 16px;
+      padding: 9px 13px;
+      font-weight: 700;
+      font-size: clamp(0.78rem, 1.5vw, 0.9rem);
+      line-height: 1.45; color: #111;
+      box-shadow: 3px 3px 0 rgba(0,0,0,0.35);
+      position: relative;
+    }
+    .bub::after {
+      content: '';
+      position: absolute;
+      bottom: -18px; left: 22px;
+      width: 0; height: 0;
+      border-left: 11px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 18px solid #000;
+    }
+    .bub::before {
+      content: '';
+      position: absolute;
+      bottom: -12px; left: 24px;
+      width: 0; height: 0;
+      border-left: 9px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 13px solid #fff;
+      z-index: 1;
+    }
+    .bub.right::after { left: auto; right: 22px; }
+    .bub.right::before { left: auto; right: 24px; }
+
+    .bub.teal {
+      background: #cbf3f0; border-color: #2ec4b6;
+      box-shadow: 3px 3px 0 rgba(46,196,182,0.45);
+    }
+    .bub.teal::after { border-top-color: #2ec4b6; }
+    .bub.teal::before { border-top-color: #cbf3f0; }
+
+    .who {
+      display: block; font-size: 0.68em;
+      text-transform: uppercase; letter-spacing: 1px;
+      color: #e63946; margin-bottom: 3px;
+    }
+    .who.t { color: #2ec4b6; }
+    .who.g { color: #52b788; }
+
+    /* ========= THOUGHT BUBBLE ========= */
+    .think {
+      flex: 1; min-width: 160px;
+      background: #fff; border: 3px solid #000; border-radius: 50px;
+      padding: 9px 13px;
+      font-weight: 700; font-style: italic;
+      font-size: clamp(0.76rem, 1.4vw, 0.88rem);
+      line-height: 1.45; color: #444;
+      box-shadow: 3px 3px 0 rgba(0,0,0,0.3);
+      position: relative;
+    }
+    .think::after {
+      content: '● ● ●';
+      position: absolute;
+      bottom: -22px; left: 20px;
+      font-size: 0.5rem; color: #000; letter-spacing: 2px;
+    }
+    .think .who { font-style: normal; color: #999; }
+
+    /* ========= SHOUT ========= */
+    .shout {
+      flex: 1; min-width: 160px;
+      background: #ffe066; border: 3px solid #000; border-radius: 4px;
+      padding: 9px 13px;
+      font-weight: 700;
+      font-size: clamp(0.78rem, 1.5vw, 0.9rem);
+      line-height: 1.45; color: #111;
+      box-shadow: 3px 3px 0 rgba(0,0,0,0.35);
+      transform: rotate(-1.5deg);
+      position: relative;
+    }
+    .shout::after {
+      content: '';
+      position: absolute; bottom: -18px; left: 22px;
+      width: 0; height: 0;
+      border-left: 11px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 18px solid #000;
+    }
+    .shout::before {
+      content: '';
+      position: absolute; bottom: -12px; left: 24px;
+      width: 0; height: 0;
+      border-left: 9px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 13px solid #ffe066;
+      z-index: 1;
+    }
+    .shout.right::after { left: auto; right: 22px; }
+    .shout.right::before { left: auto; right: 24px; }
+    .shout .who { color: #e63946; font-style: normal; }
+
+    /* ========= SFX ========= */
+    .sfx {
+      font-family: 'Bangers', cursive;
+      letter-spacing: 4px; line-height: 1;
+      text-align: center; display: block;
+      margin-bottom: 10px;
+    }
+    .sfx-red    { color: #e63946; font-size: clamp(2.2rem,6vw,3.8rem);   text-shadow: 3px 3px 0 #000, -1px -1px 0 #000; transform: rotate(-3deg); display:block; }
+    .sfx-teal   { color: #2ec4b6; font-size: clamp(2rem,5.5vw,3.5rem);   text-shadow: 3px 3px 0 #000, -1px -1px 0 #000; transform: rotate(2deg);  display:block; }
+    .sfx-yellow { color: #ffe066; font-size: clamp(2.4rem,7vw,4.5rem);   text-shadow: 3px 3px 0 #000, -1px -1px 0 #000; transform: rotate(-2deg); display:block; }
+    .sfx-gold   { color: #ffd166; font-size: clamp(2rem,5vw,3rem);        text-shadow: 3px 3px 0 #000; transform: rotate(2deg); display:block; }
+
+    /* ========= SPEC / MODE BOX ========= */
+    .specbox {
+      background: #0d1b2a; border: 2px solid #2ec4b6; border-radius: 6px;
+      padding: 10px 13px; margin-bottom: 12px;
+      font-size: clamp(0.72rem, 1.4vw, 0.84rem);
+      color: #cbf3f0; font-weight: 700; line-height: 1.55;
+      box-shadow: 0 0 14px rgba(46,196,182,0.4), 3px 3px 0 #000;
+    }
+    .specbox b {
+      display: block; font-family: 'Bangers', cursive;
+      font-size: 1.2em; color: #2ec4b6; letter-spacing: 2px; margin-bottom: 6px;
+    }
+    .specbox .sr {
+      display: flex; justify-content: space-between; gap: 8px;
+      border-bottom: 1px solid rgba(46,196,182,0.2); padding: 3px 0;
+    }
+    .specbox .sr:last-child { border-bottom: none; }
+    .specbox .sv { color: #fff; }
+
+    /* mode list */
+    .modelist {
+      background: #0d1b2a; border: 2px solid #52b788; border-radius: 6px;
+      padding: 10px 13px; margin-bottom: 12px;
+      box-shadow: 0 0 12px rgba(82,183,136,0.35), 3px 3px 0 #000;
+    }
+    .modelist b {
+      display: block; font-family: 'Bangers', cursive;
+      font-size: 1.15em; color: #52b788; letter-spacing: 2px; margin-bottom: 6px;
+    }
+    .modelist ul { list-style: none; padding: 0; }
+    .modelist ul li {
+      font-size: clamp(0.72rem, 1.4vw, 0.84rem);
+      color: #cbf3f0; font-weight: 700;
+      padding: 3px 0; border-bottom: 1px solid rgba(82,183,136,0.2);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .modelist ul li:last-child { border-bottom: none; }
+    .modelist ul li span { color: #52b788; font-size: 1rem; }
+
+    /* ========= THE END ========= */
+    .end-block { text-align: center; margin-top: 10px; padding-bottom: 20px; }
+    .end-block h2 {
+      font-family: 'Bangers', cursive;
+      font-size: clamp(2.5rem, 7vw, 4rem);
+      color: #ffe066; letter-spacing: 8px;
+      text-shadow: 4px 4px 0 #2ec4b6, 7px 7px 0 #000;
+    }
+    .end-block p { color: #cbf3f0; font-size: 0.9rem; margin-top: 10px; line-height: 1.6; }
+    .end-block p strong { color: #ffe066; }
+
+    @media (max-width: 520px) {
+      .bubbles { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+<div class="comic-wrapper">
+
+  <!-- TITLE -->
+  <div class="title-block">
+    <h1>THE SOFT<br>TOUCH</h1>
+    <div class="sub">A Soft PFM & Gentle Interaction Story</div>
+    <div class="title-rule">
+      <hr/><span>★ ZERO LATERAL FRICTION · ZERO SAMPLE DAMAGE ★</span><hr/>
+    </div>
+  </div>
+
+  <!-- ══════ PANEL 1 ══════ -->
+  <div class="panel">
+    <div class="pnum">1</div>
+    <div class="scene"><img src="1.jpg" alt="Professor frustrated with broken tips and damaged samples"/></div>
+    <div class="panel-body">
+      <div class="cap red">😩 <em>Prof. Anderson has a problem. His samples are too delicate — and every scan ends in disaster.</em></div>
+      <div class="bubbles">
+        <div class="think">
+          <span class="who">Professor (thinking)</span>
+          Broken tip... damaged cell membrane... scratched ferroelectric film... Every time I scan, I destroy the very sample I'm trying to study!
+        </div>
+        <div class="shout right">
+          <span class="who">Professor</span>
+          There HAS to be a way to image soft matter without wrecking it!!
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════ PANEL 2 ══════ -->
+  <div class="panel">
+    <div class="pnum">2</div>
+    <div class="scene"><img src="2.jpg" alt="Hard tip contact vs gentle tip contact comparison"/></div>
+    <div class="panel-body">
+      <div class="cap yellow">⚔️ <em>The brutal truth: conventional AFM tips crash into soft samples like a wrecking ball.</em></div>
+      <div class="bubbles">
+        <div class="bub">
+          <span class="who">Caption — LEFT</span>
+          Standard contact mode: massive lateral forces, tip dragging, sample deformed and destroyed.
+        </div>
+        <div class="bub teal right">
+          <span class="who t">Caption — RIGHT</span>
+          What we NEED: vertical-only force, zero lateral friction, gentle as a whisper.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════ PANEL 3 ══════ -->
+  <div class="panel">
+    <div class="pnum">3</div>
+    <div class="scene"><img src="3.jpg" alt="Professor discovers CSI Nano-Observer II Soft Interaction Mode"/></div>
+    <div class="panel-body">
+      <div class="cap teal">💡 <em>Late one night, a research paper catches his eye. CSI Instruments. Soft Interaction Control Mode.</em></div>
+      <div class="specbox">
+        <b>🧬 CSI NANO-OBSERVER II — SOFT MODE</b>
+        <div class="sr"><span>Lateral Friction</span><span class="sv">0 (ZERO)</span></div>
+        <div class="sr"><span>Sample Damage</span><span class="sv">NONE</span></div>
+        <div class="sr"><span>Tip Crashes</span><span class="sv">ELIMINATED</span></div>
+        <div class="sr"><span>Works on</span><span class="sv">Cells, Polymers, Ferroelectrics, Biologicals</span></div>
+      </div>
+      <div class="bubbles">
+        <div class="bub teal">
+          <span class="who t">Professor</span>
+          "Soft Interaction Control Mode — zero lateral friction." This is exactly what I've been looking for. This changes <em>everything.</em>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════ PANEL 4 ══════ -->
+  <div class="panel">
+    <div class="pnum">4</div>
+    <div class="scene"><img src="4.jpg" alt="Professor and CSI rep shaking hands, Soft Interaction Upgrade Kit on table"/></div>
+    <div class="panel-body">
+      <span class="sfx sfx-teal">DEAL MADE!</span>
+      <div class="cap green">🤝 <em>Next morning. A CSI representative arrives with the Soft Interaction Upgrade Kit.</em></div>
+      <div class="bubbles">
+        <div class="bub teal">
+          <span class="who t">CSI Rep</span>
+          The Nano-Observer II with the Soft Interaction kit. Your samples will never know the tip was even there.
+        </div>
+        <div class="shout right">
+          <span class="who">Professor</span>
+          Finally! Let's get this installed immediately — I have a week's worth of samples waiting!
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════ PANEL 5 ══════ -->
+  <div class="panel">
+    <div class="pnum">5</div>
+    <div class="scene"><img src="5.jpg" alt="Professor operating CSI Nano-Observer II, soft mode menu on screen"/></div>
+    <div class="panel-body">
+      <div class="cap dark">🖥️ <em>The menu unfolds like a treasure chest. One instrument. Five powerful soft modes.</em></div>
+      <div class="modelist">
+        <b>🌿 SOFT INTERACTION MODE SUITE</b>
+        <ul>
+          <li><span>🔬</span> SOFT MEKA — Nanomechanics on fragile surfaces</li>
+          <li><span>⚡</span> SOFT PFM — Piezoelectric imaging, zero damage</li>
+          <li><span>🌡️</span> SOFT SThM — Thermal mapping, gentle contact</li>
+          <li><span>🧲</span> SOFT MFM — Magnetic domains on soft materials</li>
+          <li><span>💡</span> SOFT ResiScope — Conductive maps, no friction</li>
+        </ul>
+      </div>
+      <div class="bubbles">
+        <div class="think">
+          <span class="who">Professor (thinking)</span>
+          Five modes... all soft... all non-destructive. I can finally map piezoelectric domains without scratching a single nanometer off my films.
+        </div>
+        <div class="shout right">
+          <span class="who">Professor</span>
+          SOFT PFM — you're up first!!
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════ PANEL 6 ══════ -->
+  <div class="panel">
+    <div class="pnum">6</div>
+    <div class="scene"><img src="6.jpg" alt="Professor admiring perfect Soft PFM results — piezoelectric domains, quantitative data"/></div>
+    <div class="panel-body">
+      <span class="sfx sfx-yellow">★ PERFECT DATA!! ★</span>
+      <div class="cap gold">🏆 <em>Smooth ferroelectric domains. Quantitative piezoelectric force. Zero tip crashes. Zero sample damage.</em></div>
+      <div class="bubbles">
+        <div class="bub teal">
+          <span class="who t">Professor</span>
+          Look at this — quantitative deformation, quantitative amplitude, piezoelectric force... all clean! The sample is completely intact!
+        </div>
+        <div class="shout right">
+          <span class="who">Professor</span>
+          Soft PFM did in ONE scan what I've been trying to achieve for THREE YEARS. Where has this been all my life?!
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- THE END -->
+  <div class="end-block">
+    <h2>— THE END —</h2>
+    <p>
+      Moral of the story: Some samples are too precious to be destroyed in the name of science.<br>
+      <strong>With Soft Interaction Mode — you can finally have both.</strong>
+    </p>
+    <p style="margin-top:14px; color:#2ec4b6; font-size:0.82rem;">
+      CSI Nano-Observer II &nbsp;·&nbsp; Soft Interaction Suite &nbsp;·&nbsp; Zero lateral friction. Zero sample damage. Zero compromises.
+    </p>
+  </div>
+
+</div>
+</body>
+</html>

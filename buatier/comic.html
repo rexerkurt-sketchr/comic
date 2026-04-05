@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>THE MORGADO CHRONICLES — PEDOT:PSS & The Nano-Observer Saga</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #1a0d00;
+      background-image: radial-gradient(circle at 50% 0%, #2d1500 0%, transparent 60%);
+      font-family: 'Comic Neue', cursive;
+      padding: 24px 16px 60px;
+    }
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: radial-gradient(circle, rgba(247,127,0,0.04) 1px, transparent 1px);
+      background-size: 20px 20px;
+      pointer-events: none; z-index: 0;
+    }
+
+    .comic-wrapper {
+      max-width: 860px;
+      margin: 0 auto;
+      position: relative; z-index: 1;
+    }
+
+    /* ========= TITLE ========= */
+    .title-block { text-align: center; margin-bottom: 44px; }
+    .title-block h1 {
+      font-family: 'Bangers', cursive;
+      font-size: clamp(3rem, 8vw, 5.5rem);
+      color: #fff; letter-spacing: 5px; line-height: 1;
+      text-shadow: 5px 5px 0 #f77f00, 9px 9px 0 #000, -2px -2px 0 #000;
+    }
+    .title-block .sub {
+      font-family: 'Bangers', cursive;
+      font-size: clamp(1.1rem, 3vw, 1.8rem);
+      color: #fcbf49; letter-spacing: 4px; margin-top: 8px;
+      text-shadow: 2px 2px 0 #000;
+    }
+    .title-rule {
+      display: flex; align-items: center; gap: 12px;
+      margin-top: 14px; justify-content: center;
+    }
+    .title-rule hr { flex: 1; max-width: 200px; border: 2px solid #f77f00; }
+    .title-rule span {
+      font-family: 'Bangers', cursive; color: #fcbf49;
+      font-size: 1.05rem; letter-spacing: 2px; text-shadow: 1px 1px 0 #000;
+    }
+
+    /* ========= ACT DIVIDER ========= */
+    .act {
+      text-align: center; margin: 10px 0 36px;
+      position: relative;
+    }
+    .act::before, .act::after {
+      content: ''; position: absolute; top: 50%;
+      width: 28%; height: 2px; background: #f77f00;
+    }
+    .act::before { left: 0; }
+    .act::after  { right: 0; }
+    .act span {
+      font-family: 'Bangers', cursive;
+      font-size: 1.3rem; color: #fcbf49; letter-spacing: 3px;
+      text-shadow: 2px 2px 0 #000;
+      background: #1a0d00; padding: 0 14px;
+      position: relative; z-index: 1;
+    }
+
+    /* ========= PANEL ========= */
+    .panel {
+      border: 5px solid #000;
+      border-radius: 6px;
+      box-shadow: 10px 10px 0 #000, 16px 16px 0 rgba(0,0,0,0.25);
+      margin-bottom: 48px;
+      position: relative;
+      background: #fff;
+      overflow: visible;
+    }
+    .pnum {
+      position: absolute; top: -18px; left: -18px;
+      width: 44px; height: 44px;
+      background: #f77f00; border: 3px solid #000; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Bangers', cursive; font-size: 1.4rem;
+      color: #fff; text-shadow: 1px 1px 0 #000;
+      z-index: 20; box-shadow: 3px 3px 0 #000;
+    }
+
+    .scene { line-height: 0; border-bottom: 4px solid #000; }
+    .scene img { width: 100%; display: block; }
+
+    /* ========= PANEL BODY ========= */
+    .panel-body { padding: 14px 14px 16px; background: #fff; }
+
+    /* ========= CAPTION ========= */
+    .cap {
+      padding: 8px 14px; font-weight: 700;
+      font-size: clamp(0.78rem, 1.6vw, 0.92rem);
+      line-height: 1.5; color: #1a0d00;
+      border: 3px solid #000; border-radius: 4px;
+      margin-bottom: 12px;
+      box-shadow: 3px 3px 0 rgba(0,0,0,0.3);
+    }
+    .cap.orange { background: #fcbf49; }
+    .cap.amber  { background: #f77f00; color: #fff; }
+    .cap.yellow { background: #ffe066; }
+    .cap.red    { background: #e63946; color: #fff; }
+    .cap.blue   { background: #caf0f8; }
+    .cap.green  { background: #95d5b2; }
+    .cap.dark   { background: #1a0d00; color: #fcbf49; border-color: #f77f00; }
+    .cap.sci    { background: #fff3cd; border-color: #f77f00; }
+
+    /* ========= BUBBLES ========= */
+    .bubbles { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 4px; }
+    .bubbles > * { margin-bottom: 24px; }
+
+    /* speech */
+    .bub {
+      flex: 1; min-width: 160px;
+      background: #fff; border: 3px solid #000; border-radius: 16px;
+      padding: 9px 13px; font-weight: 700;
+      font-size: clamp(0.78rem, 1.5vw, 0.9rem);
+      line-height: 1.45; color: #111;
+      box-shadow: 3px 3px 0 rgba(0,0,0,0.35);
+      position: relative;
+    }
+    .bub::after {
+      content: ''; position: absolute;
+      bottom: -18px; left: 22px; width: 0; height: 0;
+      border-left: 11px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 18px solid #000;
+    }
+    .bub::before {
+      content: ''; position: absolute;
+      bottom: -12px; left: 24px; width: 0; height: 0;
+      border-left: 9px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 13px solid #fff; z-index: 1;
+    }
+    .bub.right::after  { left: auto; right: 22px; }
+    .bub.right::before { left: auto; right: 24px; }
+
+    .bub.orange {
+      background: #fff3cd; border-color: #f77f00;
+      box-shadow: 3px 3px 0 rgba(247,127,0,0.4);
+    }
+    .bub.orange::after  { border-top-color: #f77f00; }
+    .bub.orange::before { border-top-color: #fff3cd; }
+
+    .bub.csi {
+      background: #e8f0fe; border-color: #3a5fc8;
+      box-shadow: 3px 3px 0 rgba(58,95,200,0.4);
+    }
+    .bub.csi::after  { border-top-color: #3a5fc8; }
+    .bub.csi::before { border-top-color: #e8f0fe; }
+
+    .who {
+      display: block; font-size: 0.68em;
+      text-transform: uppercase; letter-spacing: 1px;
+      color: #e63946; margin-bottom: 3px;
+    }
+    .who.o { color: #f77f00; }
+    .who.b { color: #3a5fc8; }
+    .who.g { color: #52b788; }
+
+    /* thought */
+    .think {
+      flex: 1; min-width: 160px;
+      background: #fff; border: 3px solid #000; border-radius: 50px;
+      padding: 9px 13px; font-weight: 700; font-style: italic;
+      font-size: clamp(0.76rem, 1.4vw, 0.88rem);
+      line-height: 1.45; color: #444;
+      box-shadow: 3px 3px 0 rgba(0,0,0,0.3);
+      position: relative;
+    }
+    .think::after {
+      content: '● ● ●'; position: absolute;
+      bottom: -22px; left: 20px;
+      font-size: 0.5rem; color: #000; letter-spacing: 2px;
+    }
+    .think .who { font-style: normal; color: #999; }
+
+    /* shout */
+    .shout {
+      flex: 1; min-width: 160px;
+      background: #ffe066; border: 3px solid #000; border-radius: 4px;
+      padding: 9px 13px; font-weight: 700;
+      font-size: clamp(0.78rem, 1.5vw, 0.9rem);
+      line-height: 1.45; color: #111;
+      box-shadow: 3px 3px 0 rgba(0,0,0,0.35);
+      transform: rotate(-1.5deg); position: relative;
+    }
+    .shout::after {
+      content: ''; position: absolute;
+      bottom: -18px; left: 22px; width: 0; height: 0;
+      border-left: 11px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 18px solid #000;
+    }
+    .shout::before {
+      content: ''; position: absolute;
+      bottom: -12px; left: 24px; width: 0; height: 0;
+      border-left: 9px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 13px solid #ffe066; z-index: 1;
+    }
+    .shout.right::after  { left: auto; right: 22px; }
+    .shout.right::before { left: auto; right: 24px; }
+    .shout .who { color: #f77f00; font-style: normal; }
+
+    /* ========= SFX ========= */
+    .sfx { font-family: 'Bangers', cursive; letter-spacing: 4px; line-height: 1; text-align: center; display: block; margin-bottom: 10px; }
+    .sfx-orange { color: #f77f00; font-size: clamp(2.2rem,6vw,3.8rem); text-shadow: 3px 3px 0 #000, -1px -1px 0 #000; transform: rotate(-3deg); display:block; }
+    .sfx-yellow { color: #ffe066;  font-size: clamp(2.4rem,7vw,4.5rem); text-shadow: 3px 3px 0 #000, -1px -1px 0 #000; transform: rotate(-2deg); display:block; }
+    .sfx-blue   { color: #48cae4;  font-size: clamp(2rem,5.5vw,3.5rem); text-shadow: 3px 3px 0 #000; transform: rotate(2deg); display:block; }
+    .sfx-green  { color: #52b788;  font-size: clamp(1.8rem,5vw,3rem);   text-shadow: 3px 3px 0 #000; transform: rotate(2deg); display:block; }
+
+    /* ========= SCIENCE BOX ========= */
+    .scibox {
+      background: #1a0d00; border: 2px solid #f77f00; border-radius: 6px;
+      padding: 10px 13px; margin-bottom: 12px;
+      font-size: clamp(0.72rem, 1.4vw, 0.84rem);
+      color: #fcbf49; font-weight: 700; line-height: 1.55;
+      box-shadow: 0 0 14px rgba(247,127,0,0.4), 3px 3px 0 #000;
+    }
+    .scibox b {
+      display: block; font-family: 'Bangers', cursive;
+      font-size: 1.2em; color: #f77f00; letter-spacing: 2px; margin-bottom: 6px;
+    }
+    .scibox .sr {
+      display: flex; justify-content: space-between; gap: 8px;
+      border-bottom: 1px solid rgba(247,127,0,0.2); padding: 3px 0;
+    }
+    .scibox .sr:last-child { border-bottom: none; }
+    .scibox .sv { color: #fff; }
+
+    /* ========= COMPARE BOX ========= */
+    .compare { display: flex; gap: 10px; margin-bottom: 12px; }
+    .compare-side {
+      flex: 1; border: 3px solid #000; border-radius: 4px;
+      padding: 8px 10px; font-weight: 700;
+      font-size: clamp(0.7rem, 1.3vw, 0.82rem); line-height: 1.5;
+    }
+    .compare-side b { display: block; font-family: 'Bangers', cursive; font-size: 1.05em; letter-spacing: 1px; margin-bottom: 4px; }
+    .compare-side.old  { background: #fde8e8; border-color: #e63946; }
+    .compare-side.old b  { color: #e63946; }
+    .compare-side.new_ { background: #fff3cd; border-color: #f77f00; }
+    .compare-side.new_ b { color: #f77f00; }
+
+    /* ========= JOURNAL BADGE ========= */
+    .journal {
+      background: #003087; border: 3px solid #000; border-radius: 8px;
+      padding: 10px 14px; margin-bottom: 12px;
+      text-align: center; color: #fff; font-weight: 700;
+      font-size: clamp(0.78rem, 1.5vw, 0.9rem);
+      box-shadow: 4px 4px 0 #000;
+    }
+    .journal .jname {
+      font-family: 'Bangers', cursive; font-size: 1.4em;
+      color: #fcbf49; letter-spacing: 2px; display: block; margin-bottom: 4px;
+    }
+
+    /* ========= THE END ========= */
+    .end-block { text-align: center; margin-top: 10px; padding-bottom: 20px; }
+    .end-block h2 {
+      font-family: 'Bangers', cursive;
+      font-size: clamp(2.5rem, 7vw, 4rem);
+      color: #fcbf49; letter-spacing: 8px;
+      text-shadow: 4px 4px 0 #f77f00, 7px 7px 0 #000;
+    }
+    .end-block p { color: #fcbf49; font-size: 0.9rem; margin-top: 10px; line-height: 1.6; }
+    .end-block p strong { color: #ffe066; }
+
+    @media (max-width: 520px) {
+      .bubbles { flex-direction: column; }
+      .compare { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+<div class="comic-wrapper">
+
+  <!-- TITLE -->
+  <div class="title-block">
+    <h1>THE MORGADO<br>CHRONICLES</h1>
+    <div class="sub">Prof. Jorge Morgado · IST Técnico Lisboa · PEDOT:PSS & the Nano-Observer Saga</div>
+    <div class="title-rule">
+      <hr/><span>★ FROM ONE SAMPLE TO ACS APPLIED MATERIALS ★</span><hr/>
+    </div>
+  </div>
+
+  <!-- ══ ACT I ══ -->
+  <div class="act"><span>⚗️ ACT I — THE QUESTION</span></div>
+
+  <!-- PANEL 1 -->
+  <div class="panel">
+    <div class="pnum">1</div>
+    <div class="scene"><img src="1.jpg" alt="University building — Portugal's First"/></div>
+    <div class="panel-body">
+      <div class="cap orange">🇵🇹 <em>University of Porto. A lab where the impossible is simply a matter of finding the right instrument.</em></div>
+      <div class="bubbles">
+        <div class="think">
+          <span class="who">Narrator</span>
+          This is where it all began. One researcher. One question. A conducting polymer no one had ever properly imaged at the nanoscale — in Portugal.
+        </div>
+        <div class="bub orange right">
+          <span class="who o">Somewhere in the building...</span>
+          Portugal's first. But first what, exactly? That part was still being written.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 2 -->
+  <div class="panel">
+    <div class="pnum">2</div>
+    <div class="scene"><img src="2.jpg" alt="Prof. Morgado holding a PEDOT:PSS sample"/></div>
+    <div class="panel-body">
+      <div class="cap dark">🔬 <em>Prof. Jorge Manuel Ferreira Morgado. Full Professor, IST Técnico Lisboa. PEDOT:PSS specialist. Chronic asker of inconvenient questions.</em></div>
+      <div class="bubbles">
+        <div class="think">
+          <span class="who">Prof. Morgado (thinking)</span>
+          PEDOT:PSS — the conducting polymer everyone uses, but no one truly understands at the nano level. Phase separation, morphology, charge transport pathways... all hidden. All waiting.
+        </div>
+        <div class="shout right">
+          <span class="who">Prof. Morgado</span>
+          What lies beneath the surface? That's the only question that matters.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ACT II ══ -->
+  <div class="act"><span>🔭 ACT II — THE FIRST ARRIVAL</span></div>
+
+  <!-- PANEL 3 -->
+  <div class="panel">
+    <div class="pnum">3</div>
+    <div class="scene"><img src="3.jpg" alt="Prof. Morgado unboxing the first CSI Nano-Observer in Portugal"/></div>
+    <div class="panel-body">
+      <div class="cap amber">📦 <em>The box arrives. A crowd gathers in the hallway. History is about to be unboxed.</em></div>
+      <div class="bubbles">
+        <div class="shout">
+          <span class="who">Prof. Morgado</span>
+          THE FIRST NANO-OBSERVER IN PORTUGAL!! Do you understand what this means?! We can finally SEE what we've only been theorizing!
+        </div>
+        <div class="bub right">
+          <span class="who">Colleague</span>
+          He's been tracking that shipping number for two weeks straight.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 4 -->
+  <div class="panel">
+    <div class="pnum">4</div>
+    <div class="scene"><img src="4.jpg" alt="PEDOT:PSS secret unveiled on screen — molecular structure and AFM data"/></div>
+    <div class="panel-body">
+      <div class="cap sci">⚡ <em>First scan. Then the second. Then: a moment of pure, crystalline scientific clarity.</em></div>
+      <div class="scibox">
+        <b>🧬 PEDOT:PSS — SECRETS UNVEILED</b>
+        <div class="sr"><span>Morphology</span><span class="sv">Phase-separated domains — fully resolved</span></div>
+        <div class="sr"><span>Charge Transport</span><span class="sv">Preferential pathways — now visible</span></div>
+        <div class="sr"><span>Surface Potential</span><span class="sv">Mapped at nanoscale for the first time</span></div>
+        <div class="sr"><span>Previous knowledge</span><span class="sv">Educated guesses. Now: hard data.</span></div>
+      </div>
+      <div class="bubbles">
+        <div class="bub orange">
+          <span class="who o">Prof. Morgado</span>
+          There it is. The phase separation. The conductive PEDOT-rich domains. The PSS-rich insulating matrix. We're not guessing anymore — we're <em>measuring</em>.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ACT III ══ -->
+  <div class="act"><span>🔧 ACT III — THE UPGRADE SAGA</span></div>
+
+  <!-- PANEL 5 -->
+  <div class="panel">
+    <div class="pnum">5</div>
+    <div class="scene"><img src="5.jpg" alt="Prof. Morgado scratching head at his old 5100 AFM"/></div>
+    <div class="panel-body">
+      <div class="cap yellow">💭 <em>But there was another machine in the lab. Old. Reliable. And about to become something extraordinary.</em></div>
+      <div class="bubbles">
+        <div class="think">
+          <span class="who">Prof. Morgado (thinking)</span>
+          My old 5100 AFM. A workhorse. Fifteen years of faithful service. I can't just retire it... but I need more modes. More capability. If only there were a way to give it new life.
+        </div>
+        <div class="bub right">
+          <span class="who">Inner Voice</span>
+          But upgrading my old 5100 through the manufacturer? Not exactly an option...
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 6 -->
+  <div class="panel">
+    <div class="pnum">6</div>
+    <div class="scene"><img src="6.jpg" alt="CSI upgrade electronics box levitating from its box with lightning"/></div>
+    <div class="panel-body">
+      <span class="sfx sfx-orange">⚡ UPGRADE UNLOCKED! ⚡</span>
+      <div class="cap orange">🎮 <em>Enter: the CSI upgrade module. Compact. Powerful. Compatible with the old 5100 scanner head. Game-changing.</em></div>
+      <div class="bubbles">
+        <div class="shout">
+          <span class="who">Prof. Morgado</span>
+          CSI's electronics module — it connects directly to my old 5100 scanner head! All the new modes, none of the hardware waste!
+        </div>
+        <div class="bub orange right">
+          <span class="who o">CSI Module</span>
+          ResiScope. KFM. PFM. MFM. SThM. All unlocked. Your old scanner just got a software-defined brain transplant.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 7 -->
+  <div class="panel">
+    <div class="pnum">7</div>
+    <div class="scene"><img src="7.jpg" alt="CSI Nano-Observer + CSI module + old 5100 head all connected — Dual AFM Power"/></div>
+    <div class="panel-body">
+      <div class="cap dark">⚡ <em>The lab now runs two full AFM systems. The veteran 5100, reborn. The Nano-Observer, leading the charge.</em></div>
+      <div class="compare">
+        <div class="compare-side old">
+          <b>🔴 OLD SETUP</b>
+          Old 5100 head alone. Limited modes. No straightforward upgrade path.
+        </div>
+        <div class="compare-side new_">
+          <b>🟠 NEW SETUP</b>
+          Old 5100 head + CSI module. Full mode suite. Nano-Observer II running in parallel. Dual AFM power.
+        </div>
+      </div>
+      <div class="bubbles">
+        <div class="shout">
+          <span class="who">Prof. Morgado</span>
+          TEAMWORK!! The Nano-Observer handles surface potential. The old 5100 head handles mechanical mapping. SIMULTANEOUSLY. This is what peak performance looks like!
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ACT IV ══ -->
+  <div class="act"><span>🚀 ACT IV — NEXT LEVEL</span></div>
+
+  <!-- PANEL 8 -->
+  <div class="panel">
+    <div class="pnum">8</div>
+    <div class="scene"><img src="8.jpg" alt="Delivery of CSI Nano-Observer II v2 boxes"/></div>
+    <div class="panel-body">
+      <span class="sfx sfx-blue">NEXT LEVEL: INCOMING!</span>
+      <div class="cap blue">📬 <em>Two years later. Another delivery. But this time, the box is bigger — and so is everything inside it.</em></div>
+      <div class="bubbles">
+        <div class="bub csi">
+          <span class="who b">Delivery Guy</span>
+          CSI Nano-Observer II Plus V2 — two units. Special delivery for Prof. Morgado. Sign here, please.
+        </div>
+        <div class="shout right">
+          <span class="who">Prof. Morgado</span>
+          Two units?! Oh, this is going to be a very good year for Portuguese nanoscience!
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 9 -->
+  <div class="panel">
+    <div class="pnum">9</div>
+    <div class="scene"><img src="9.jpg" alt="Prof. Morgado presents the CSI Nano-Observer II with open arms"/></div>
+    <div class="panel-body">
+      <span class="sfx sfx-yellow">★ THE NANO-OBSERVER II ★</span>
+      <div class="cap orange">🎉 <em>He doesn't just unbox instruments. He gives them a proper introduction.</em></div>
+      <div class="bubbles">
+        <div class="shout">
+          <span class="who">Prof. Morgado</span>
+          Ladies and gentlemen — the CSI Nano-Observer II! Faster. Sharper. More modes. And yes, it does everything the first one did — but <em>better</em>.
+        </div>
+        <div class="bub right">
+          <span class="who">Grad Student</span>
+          Is he... introducing it like it's a person?
+        </div>
+        <div class="bub orange right">
+          <span class="who o">Other Student</span>
+          At this point, it practically is.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ ACT V ══ -->
+  <div class="act"><span>🏆 ACT V — ACADEMIC TRIUMPH</span></div>
+
+  <!-- PANEL 10 -->
+  <div class="panel">
+    <div class="pnum">10</div>
+    <div class="scene"><img src="10.jpg" alt="Prof. Morgado holds up his ACS Applied Materials paper — validation!"/></div>
+    <div class="panel-body">
+      <span class="sfx sfx-yellow">★ PUBLISHED!! ★</span>
+      <div class="journal">
+        <span class="jname">ACS APPLIED MATERIALS &amp; INTERFACES</span>
+        "Nanoscale Morphology and Charge Transport Mapping in PEDOT:PSS Thin Films via Multi-Modal AFM" — Prof. Morgado et al.
+      </div>
+      <div class="bubbles">
+        <div class="bub orange">
+          <span class="who o">Prof. Morgado</span>
+          Cited. Validated. Peer-reviewed. What started as a single question — "what lies beneath the surface?" — became an answer the whole field needed.
+        </div>
+        <div class="shout right">
+          <span class="who">Prof. Morgado</span>
+          Portugal's first Nano-Observer. Portugal's first nanoscale PEDOT:PSS data. And now — published in ACS. THAT'S how you write history!!
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- THE END -->
+  <div class="end-block">
+    <h2>— THE END —</h2>
+    <p>
+      Moral of the story: Great science starts with a great question.<br>
+      <strong>But it finishes with the right instrument — and the courage to be first.</strong>
+    </p>
+    <p style="margin-top: 14px; color: #f77f00; font-size: 0.82rem;">
+      Prof. Jorge Manuel Ferreira Morgado &nbsp;·&nbsp; Full Professor, IST Técnico Lisboa &nbsp;·&nbsp; CSI Nano-Observer &nbsp;·&nbsp; Portugal's AFM Pioneer &nbsp;·&nbsp; PEDOT:PSS Unlocked.
+    </p>
+  </div>
+
+</div>
+</body>
+</html>
