@@ -87,11 +87,14 @@
     .grid {
       position: relative; z-index: 1;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 28px;
-      max-width: 1100px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 32px;
+      max-width: 1400px;
       margin: 0 auto;
-      padding: 0 24px 80px;
+      padding: 0 32px 80px;
+    }
+    @media (max-width: 720px) {
+      .grid { grid-template-columns: 1fr; gap: 22px; padding: 0 16px 60px; }
     }
 
     /* ============================================================
@@ -115,7 +118,7 @@
 
     /* cover image */
     .card-cover {
-      width: 100%; aspect-ratio: 16/9;
+      width: 100%; aspect-ratio: 4/3;
       object-fit: cover;
       display: block;
       transition: transform 0.4s ease;
@@ -125,45 +128,45 @@
     /* overlay */
     .card-overlay {
       position: absolute; inset: 0;
-      background: linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.3) 50%, transparent 100%);
+      background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.45) 45%, transparent 100%);
       display: flex; flex-direction: column; justify-content: flex-end;
-      padding: 20px;
+      padding: 28px;
     }
 
     .card-badge {
       align-self: flex-start;
       font-family: 'Bangers', cursive;
-      font-size: 0.75rem; letter-spacing: 2px;
-      padding: 4px 10px; border-radius: 4px;
+      font-size: 0.85rem; letter-spacing: 2px;
+      padding: 5px 13px; border-radius: 4px;
       border: 2px solid currentColor;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
 
     .card-title {
       font-family: 'Bangers', cursive;
-      font-size: clamp(1.4rem, 3vw, 1.8rem);
+      font-size: clamp(1.8rem, 3.2vw, 2.6rem);
       letter-spacing: 2px;
       line-height: 1.1;
       text-shadow: 2px 2px 0 #000;
     }
     .card-sub {
-      font-size: 0.78rem;
-      color: rgba(255,255,255,0.65);
-      margin-top: 5px;
-      line-height: 1.4;
+      font-size: clamp(0.88rem, 1.3vw, 1.05rem);
+      color: rgba(255,255,255,0.72);
+      margin-top: 8px;
+      line-height: 1.5;
     }
     .card-meta {
       display: flex; align-items: center; justify-content: space-between;
-      margin-top: 12px;
+      margin-top: 16px;
     }
     .card-panels {
-      font-size: 0.75rem; color: rgba(255,255,255,0.5);
+      font-size: 0.85rem; color: rgba(255,255,255,0.5);
       letter-spacing: 1px;
     }
     .card-btn {
       font-family: 'Bangers', cursive;
-      font-size: 0.9rem; letter-spacing: 2px;
-      padding: 6px 16px; border-radius: 4px;
+      font-size: 1.05rem; letter-spacing: 2px;
+      padding: 8px 22px; border-radius: 4px;
       border: 2px solid #fff; color: #fff;
       background: transparent;
       cursor: pointer;
@@ -351,10 +354,13 @@
     /* ============================================================
        RESPONSIVE
     ============================================================ */
-    @media (max-width: 600px) {
+    @media (max-width: 700px) {
       .modal-arrow { width: 36px; height: 36px; font-size: 0.9rem; }
-      .modal-arrow.left  { left: 6px; }
-      .modal-arrow.right { right: 6px; }
+      .modal-arrow.left  { left: 4px; }
+      .modal-arrow.right { right: 4px; }
+      /* stack panels vertically on mobile */
+      .slide { flex-direction: column; padding: 6px 42px; overflow-y: auto; }
+      .modal-stage { height: clamp(480px, 80vh, 900px); }
     }
   </style>
 </head>
@@ -551,38 +557,78 @@
       if (e.target === document.getElementById('modalOverlay')) closeModal();
     }
 
-    /* ── BUILD SLIDES ─────────────────────────────────────────── */
+    /* ── BUILD SLIDES (2 panels per page) ────────────────────── */
     function buildSlides() {
       const stage = document.getElementById('modalStage');
-      // remove old slides
       stage.querySelectorAll('.slide').forEach(s => s.remove());
-      currentComic.panels.forEach((p, i) => {
+
+      const panels = currentComic.panels;
+      const pages  = Math.ceil(panels.length / 2);
+
+      for (let p = 0; p < pages; p++) {
         const div = document.createElement('div');
-        div.className = 'slide' + (i === 0 ? ' active' : '');
-        div.dataset.index = i;
-        const img = document.createElement('img');
-        img.src = `${currentComic.folder}/${p.img}.${currentComic.ext}`;
-        img.alt = `Panel ${i+1}`;
-        div.appendChild(img);
+        div.className = 'slide' + (p === 0 ? ' active' : '');
+        div.dataset.page = p;
+
+        // Left panel
+        div.appendChild(makeSlot(panels[p * 2], p * 2));
+
+        // Right panel (may not exist for last odd panel)
+        const ri = p * 2 + 1;
+        if (ri < panels.length) {
+          div.appendChild(makeSlot(panels[ri], ri));
+        } else {
+          const empty = document.createElement('div');
+          empty.className = 'panel-slot empty';
+          div.appendChild(empty);
+        }
+
         stage.appendChild(div);
-      });
+      }
+    }
+
+    function makeSlot(panel, idx) {
+      const slot = document.createElement('div');
+      slot.className = 'panel-slot';
+
+      const img = document.createElement('img');
+      img.src = `${currentComic.folder}/${panel.img}.${currentComic.ext}`;
+      img.alt = `Panel ${idx + 1}`;
+      slot.appendChild(img);
+
+      const cap = document.createElement('div');
+      cap.className = 'slot-caption';
+
+      const num = document.createElement('span');
+      num.className = 'slot-num';
+      num.textContent = `PANEL ${idx + 1}`;
+      cap.appendChild(num);
+
+      const txt = document.createElement('p');
+      txt.textContent = panel.caption;
+      cap.appendChild(txt);
+
+      slot.appendChild(cap);
+      return slot;
     }
 
     function buildDots() {
-      const dots = document.getElementById('modalDots');
+      const dots  = document.getElementById('modalDots');
       dots.innerHTML = '';
-      currentComic.panels.forEach((_, i) => {
+      const pages = Math.ceil(currentComic.panels.length / 2);
+      for (let p = 0; p < pages; p++) {
         const btn = document.createElement('button');
-        btn.className = 'dot' + (i === 0 ? ' active' : '');
-        btn.onclick = () => goToPanel(i);
+        btn.className = 'dot' + (p === 0 ? ' active' : '');
+        btn.onclick = (function(pp){ return () => goToPanel(pp); })(p);
         dots.appendChild(btn);
-      });
+      }
     }
 
     /* ── NAVIGATE ─────────────────────────────────────────────── */
     function updatePanel(idx) {
-      const total = currentComic.panels.length;
-      currentPanel = idx;
+      const total      = currentComic.panels.length;
+      const pages      = Math.ceil(total / 2);
+      currentPanel     = idx;
 
       // slides
       document.querySelectorAll('.slide').forEach((s, i) => {
@@ -596,25 +642,29 @@
         d.classList.toggle('active', i === idx);
       });
 
-      // counter
-      document.getElementById('modalCounter').textContent = `${idx + 1} / ${total}`;
-
-      // caption
-      document.getElementById('modalCaption').textContent = currentComic.panels[idx].caption;
+      // counter: show panel range
+      const p1 = idx * 2 + 1;
+      const p2 = Math.min(idx * 2 + 2, total);
+      const rangeStr = p1 === p2 ? `${p1}` : `${p1}–${p2}`;
+      document.getElementById('modalCounter').textContent = `${rangeStr} / ${total}`;
 
       // arrows
       document.getElementById('arrowLeft').disabled  = idx === 0;
-      document.getElementById('arrowRight').disabled = idx === total - 1;
+      document.getElementById('arrowRight').disabled = idx === pages - 1;
     }
 
     function goToPanel(idx) {
-      if (isAnimating || idx === currentPanel) return;
+      const pages = Math.ceil(currentComic.panels.length / 2);
+      if (isAnimating || idx === currentPanel || idx < 0 || idx >= pages) return;
       isAnimating = true;
       updatePanel(idx);
       setTimeout(() => { isAnimating = false; }, 320);
     }
 
-    function nextPanel() { if (currentPanel < currentComic.panels.length - 1) goToPanel(currentPanel + 1); }
+    function nextPanel() {
+      const pages = Math.ceil(currentComic.panels.length / 2);
+      if (currentPanel < pages - 1) goToPanel(currentPanel + 1);
+    }
     function prevPanel() { if (currentPanel > 0) goToPanel(currentPanel - 1); }
 
     /* ── KEYBOARD ─────────────────────────────────────────────── */
