@@ -24,6 +24,8 @@
       --teal: #2ec4b6;
       --purple: #c77dff;
       --orange: #f77f00;
+      --green: #06d6a0;
+      --rose: #ff4d6d;
     }
 
     html {
@@ -580,15 +582,40 @@
     </div>
 
     <div class="card" onclick="openComic('morgado')">
-      <img class="card-cover" src="morgado/1.jpg" alt="The Morgado Chronicles" />
+      <img class="card-cover" src="morgado/1.jpg" alt="The Lisbon Chronicles" />
       <div class="card-overlay">
         <div class="card-badge" style="color: var(--orange); border-color: var(--orange);">PEDOT:PSS · IST LISBOA</div>
-        <div class="card-title" style="color: var(--orange);">The Morgado Chronicles</div>
-        <div class="card-sub">Prof. Jorge Morgado brings the first Nano-Observer to Portugal, unlocks PEDOT:PSS secrets,
-          upgrades his old 5100 AFM, and publishes in ACS.</div>
+        <div class="card-title" style="color: var(--orange);">The Lisbon Chronicles</div>
+        <div class="card-sub">A full professor at IST Técnico Lisboa brings the first Nano-Observer to Portugal, unlocks PEDOT:PSS secrets, upgrades his old 5100 AFM, and publishes in ACS.</div>
         <div class="card-meta">
           <span class="card-panels">10 PANELS</span>
           <button class="card-btn" style="border-color: var(--orange); color: var(--orange);">READ NOW →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" onclick="openComic('kyoto')">
+      <img class="card-cover" src="kyoto/1.jpg" alt="The GNR Chronicles"/>
+      <div class="card-overlay">
+        <div class="card-badge" style="color: var(--green); border-color: var(--green);">GRAPHENE · MULTIMODE</div>
+        <div class="card-title" style="color: var(--green);">The GNR Chronicles</div>
+        <div class="card-sub">A MultiMode AFM running out of answers gets a complete upgrade with CSI Galaxy Dual Controller. New modes, new precision, and a Nature paper on graphene nanoribbon etching.</div>
+        <div class="card-meta">
+          <span class="card-panels">5 PANELS</span>
+          <button class="card-btn" style="border-color: var(--green); color: var(--green);">READ NOW →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" onclick="openComic('aissou')">
+      <img class="card-cover" src="aissou/1.jpg" alt="The Nano Architect"/>
+      <div class="card-overlay">
+        <div class="card-badge" style="color: var(--rose); border-color: var(--rose);">RESISCOPE · GYROID</div>
+        <div class="card-title" style="color: var(--rose);">The Nano Architect</div>
+        <div class="card-sub">Gyroid nanochannels hold the key to ionic conductivity, but standard C-AFM can't see the contrast. ResiScope maps 10 decades of resistance and reveals the full picture.</div>
+        <div class="card-meta">
+          <span class="card-panels">6 PANELS</span>
+          <button class="card-btn" style="border-color: var(--rose); color: var(--rose);">READ NOW →</button>
         </div>
       </div>
     </div>
@@ -671,13 +698,13 @@
         ]
       },
       morgado: {
-        title: 'The Morgado Chronicles',
+        title: 'The Lisbon Chronicles',
         color: '#f77f00',
         folder: 'morgado',
         ext: 'jpg',
         panels: [
           { img: '1', caption: 'University of Porto. A lab where the impossible is simply a matter of finding the right instrument. Portugal\'s first. But first what, exactly? That part was still being written.' },
-          { img: '2', caption: 'Prof. Jorge Manuel Ferreira Morgado. Full Professor, IST Técnico Lisboa. "PEDOT:PSS, the conducting polymer everyone uses, but no one truly understands at the nano level. What lies beneath the surface?"' },
+          { img: '2', caption: 'A full professor at IST Técnico Lisboa picks up a sample and stares at it hard. "PEDOT:PSS, the conducting polymer everyone uses, but no one truly understands at the nano level. What lies beneath the surface?"' },
           { img: '3', caption: 'The box arrives. A crowd gathers. "THE FIRST NANO-OBSERVER IN PORTUGAL!! Do you understand what this means?! We can finally SEE what we\'ve only been theorizing!" "He\'s tracked that shipping number for two weeks."' },
           { img: '4', caption: 'PEDOT:PSS SECRET UNVEILED. Phase-separated domains, charge transport pathways, surface potential: all mapped at nanoscale for the first time. "We\'re not guessing anymore, we\'re measuring."' },
           { img: '5', caption: 'The old 5100 AFM. A workhorse. Fifteen years of faithful service. "I can\'t retire it... but I need more modes. More capability. If only there were a way to give it new life."' },
@@ -686,6 +713,33 @@
           { img: '8', caption: 'NEXT LEVEL: INCOMING! Delivery of CSI Nano-Observer II Plus V2, two units. "Two units?! Oh, this is going to be a very good year for Portuguese nanoscience!"' },
           { img: '9', caption: '"Ladies and gentlemen, the CSI Nano-Observer II! Faster. Sharper. More modes." "Is he introducing it like it\'s a person?" "At this point, it practically is."' },
           { img: '10', caption: '★ PUBLISHED!! ACS Applied Materials & Interfaces. "It started with a single question: what lies beneath the surface? The answer changed everything the field thought it knew. Portugal\'s first Nano-Observer. THAT\'S how you write history!!"' }
+        ]
+      },
+      kyoto: {
+        title: 'The GNR Chronicles',
+        color: '#06d6a0',
+        folder: 'kyoto',
+        ext: 'jpg',
+        panels: [
+          { img: '1', caption: 'Kyoto University. Four graphene nanoribbon structures on the board, all question marks. The AFM screen shows blurry, unresolved scans. "Our MultiMode can barely distinguish them. We\'re trying to do atomic-scale science with a blunt instrument."' },
+          { img: '2', caption: 'A new page opens: CSI Galaxy Dual Controller, the ultimate upgrade for MultiMode systems. AutoApproach, AutoGain, AutoTune. New modes: ResiScope, HD-KFM, Soft Interaction Control Mode. Modern intuitive software. "This is exactly what our MultiMode has been missing."' },
+          { img: '3', caption: 'Installation day. The Galaxy Dual Controller sits beside the MultiMode, cable connected and power on. "Same scanner head, completely new brain. Our MultiMode just became a different instrument."' },
+          { img: '4', caption: 'First scan result on screen: graphene nanoribbons on silicon, resolved at 100nm precision. Ribbon edges sharp, terraces clear, scattered fragments mapped. "We can finally see exactly where they are and what they\'re doing."' },
+          { img: '5', caption: '★ PUBLISHED IN NATURE!! "Graphene nanoribbon catalytic etching of silicon." Kyoto University. MultiMode + CSI Galaxy Dual Controller. "What our instrument couldn\'t resolve before, it can now. And the whole world just read about it."' }
+        ]
+      },
+      aissou: {
+        title: 'The Nano Architect',
+        color: '#ff4d6d',
+        folder: 'aissou',
+        ext: 'jpg',
+        panels: [
+          { img: '1', caption: 'The samples are ready. The question is not. "I need to map the local ionic conductivity of these gyroid nanochannels. The structure is nanoscale, the conductivity contrast is subtle. Standard C-AFM won\'t cut it. But how?"' },
+          { img: '2', caption: 'A colleague enters the lab. The CSI Nano-Observer II glows on the table. "The ResiScope module is ready!" "Finally. Let\'s see what these channels are actually doing at the nanoscale."' },
+          { img: '3', caption: 'Side by side, the difference is stark. Traditional C-AFM: limited range and static gain, missing critical contrast. ResiScope: 10 decades of dynamic range, real-time auto-gain. "No more saturation. No more blind spots. Every order of magnitude, captured."' },
+          { img: '4', caption: 'The resistance map lights up the screen. Gyroid double-channel structures glow as conductive pathways, disordered regions go dark. "There, the DG channels are the conductive pathways. The disordered regions are dead zones."' },
+          { img: '5', caption: 'Printout in hand: DG gyroid regions, high conductivity. Disordered regions, low conductivity. Quantified, mapped, confirmed. "Without ResiScope, this resolution was impossible. Now we have the full picture and the numbers to back it up."' },
+          { img: '6', caption: '★ THE NANO ARCHITECT! Built an answer from the bottom up: gyroid nanochannels mapped, ionic pathways revealed, conductivity quantified. Powered by CSInstruments ResiScope, IEM Montpellier. Science that was invisible is now undeniable.' }
         ]
       }
     };
